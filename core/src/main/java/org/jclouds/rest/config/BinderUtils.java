@@ -145,9 +145,9 @@ public class BinderUtils {
    @SuppressWarnings({ "unchecked", "serial" })
    private static <S, A> void bindCallGetOnFutures(Binder binder, Class<S> sync, Class<A> async) {
       TypeToken<CallGetOnFuturesProvider<S, A>> token = new TypeToken<CallGetOnFuturesProvider<S, A>>() {
-      }.where(new TypeParameter<S>() {
-      }, sync).where(new TypeParameter<A>() {
-      }, async);
+      }.where(new TypeParameter<A>() {
+      }, async).where(new TypeParameter<S>() {
+      }, sync);
       binder.bind(sync).toProvider(TypeLiteral.class.cast(TypeLiteral.get(token.getType())));
    }
 
