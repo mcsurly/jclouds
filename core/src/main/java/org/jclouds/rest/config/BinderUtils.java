@@ -106,7 +106,7 @@ public class BinderUtils {
       try {
       binder.bind(sync).toProvider(TypeLiteral.class.cast(TypeLiteral.get(token.getType())));
       } catch(RuntimeException e) {
-        System.err.format("************ Caught '%s' trying to bind '%s' to '%s'. Input async class: '%s'", e.getMessage(), TypeLiteral.get(token.getType()), sync, async);
+        System.err.format("************ Caught '%s' trying to bind '%s' to '%s'. Input async class: '%s'%n%n", e.getMessage(), TypeLiteral.get(token.getType()), sync, async);
         throw e;
       }
    }
