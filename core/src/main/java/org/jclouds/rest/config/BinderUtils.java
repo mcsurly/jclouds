@@ -102,10 +102,10 @@ public class BinderUtils {
       TypeToken<SyncToAsyncHttpApiProvider<S, A>> token = new TypeToken<SyncToAsyncHttpApiProvider<S, A>>() {
       };
       System.out.println("**** token now (step 1): " + token);
-      token = token.where(new TypeParameter<S>() {}, sync);
-      System.out.println("**** token now (after S): " + token);
       token = token.where(new TypeParameter<A>() {}, async);
       System.out.println("**** token now (after A): " + token);
+      token = token.where(new TypeParameter<S>() {}, sync);
+      System.out.println("**** token now (after S): " + token);
       try {
       binder.bind(sync).toProvider(TypeLiteral.class.cast(TypeLiteral.get(token.getType())));
       } catch(RuntimeException e) {
