@@ -20,6 +20,7 @@ import com.google.common.reflect.TypeParameter;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
+import java.util.Map;
 
 /**
  * 
@@ -101,17 +102,25 @@ public class BinderUtils {
    private static <S, A> void bindHttpApiProvider(Binder binder, Class<S> sync, Class<A> async) {
       TypeToken<SyncToAsyncHttpApiProvider<S, A>> token = new TypeToken<SyncToAsyncHttpApiProvider<S, A>>() {
       };
+      System.out.println("Printing Guava sample for 'where': " + mapOf(TypeToken.of(String.class), TypeToken.of(Integer.class)));
       System.out.println("**** token now (step 1): " + token);
       token = token.where(new TypeParameter<A>() {}, async);
       System.out.println("**** token now (after A): " + token);
-      token = token.where(new TypeParameter<S>() {}, sync);
-      System.out.println("**** token now (after S): " + token);
+      token = token.where(new TypeParameter<S>() {}, TypeToken.of(sync));
+      System.out.println("**** token now (after S, using TypeToken): " + token);
       try {
       binder.bind(sync).toProvider(TypeLiteral.class.cast(TypeLiteral.get(token.getType())));
       } catch(RuntimeException e) {
         System.err.format("************ Caught '%s' trying to bind '%s' to '%s'. Input async class: '%s'%n%n", e.getMessage(), TypeLiteral.get(token.getType()), sync, async);
         throw e;
       }
+   }
+   
+   public static <K, V> TypeToken<Map<K, V>> mapOf(
+       TypeToken<K> keyType, TypeToken<V> valueType) {
+     return new TypeToken<Map<K, V>>() {}
+         .where(new TypeParameter<K>() {}, keyType)
+         .where(new TypeParameter<V>() {}, valueType);
    }
    
    /**
