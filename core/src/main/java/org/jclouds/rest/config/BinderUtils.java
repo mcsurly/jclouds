@@ -103,7 +103,12 @@ public class BinderUtils {
       }.where(new TypeParameter<S>() {
       }, sync).where(new TypeParameter<A>() {
       }, async);
+      try {
       binder.bind(sync).toProvider(TypeLiteral.class.cast(TypeLiteral.get(token.getType())));
+      } catch(RuntimeException e) {
+        System.err.format("************ Caught '%s' trying to bind '%s' to '%s'. Input async class: '%s'", e.getMessage(), TypeLiteral.get(token.getType()), async);
+        throw e;
+      }
    }
    
    /**
